@@ -1,47 +1,39 @@
 package nl.inholland.javafx.Model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.UUID;
 
 public class Movie {
+    private UUID id;
     private String movieName;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalTime duration;
     private double ticketPrice;
     private int availableTickets;
-    private Room room;
 
-    public Movie(String movieName, LocalDateTime startTime, LocalDateTime endTime, double ticketPrice,
-                 int availableTickets, Room room) {
+    public Movie(String movieName, LocalTime duration, double ticketPrice,
+                 int availableTickets) {
         this.movieName = movieName;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.duration = duration;
         this.ticketPrice = ticketPrice;
         this.availableTickets = availableTickets;
-        this.room = room;
+        this.id = UUID.randomUUID();
     }
 
     public String getMovieName() {
         return movieName;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public void setMovieName(String movieName) {
         this.movieName = movieName;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
     }
 
     public double getTicketPrice() {
@@ -60,11 +52,11 @@ public class Movie {
         this.availableTickets = availableTickets;
     }
 
-    public Room getRoom() {
-        return room;
+    public LocalTime getDuration() {
+        return duration;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setDuration(LocalTime duration) {
+        this.duration = duration;
     }
 }

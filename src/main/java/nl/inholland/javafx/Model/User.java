@@ -1,6 +1,9 @@
 package nl.inholland.javafx.Model;
 
+import java.util.UUID;
+
 public class User {
+    private UUID userId;
     private String firstName;
     private String lastName;
     private String userName;
@@ -13,6 +16,16 @@ public class User {
         this.userName = userName;
         this.password = password;
         this.userRole = Role.USER;
+        setUserId();
+
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    private void setUserId() {
+        this.userId = UUID.randomUUID();
     }
 
     public String getFirstName() {
