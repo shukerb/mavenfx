@@ -35,27 +35,27 @@ public class DataBase {
         DateTimeFormatter tFormatter = DateTimeFormatter.ofPattern("H:m");
         LocalTime duration = LocalTime.parse("1:30", tFormatter);
 
-        Movie movie1 = new Movie("No Time To Lie", duration, 12.00, 200);
-        Movie movie2 = new Movie("The Addams Family 19", duration, 9.00, 200);
-        Movie movie3 = new Movie("Pulp Fiction", duration, 9.00, 200);
-        Movie movie4 = new Movie("Fight Club", duration, 12.00, 200);
+        Movie movie1 = new Movie("No Time To Lie", duration, 12.00);
+        Movie movie2 = new Movie("The Addams Family 19", duration, 9.00);
+        Movie movie3 = new Movie("Pulp Fiction", duration, 9.00);
+        Movie movie4 = new Movie("Fight Club", duration, 12.00);
         movies.add(movie1);
         movies.add(movie2);
         movies.add(movie3);
         movies.add(movie4);
 
         showings = new ArrayList<>();
-        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy H:m");
         LocalDateTime startTimeOne = LocalDateTime.parse("09-10-2021 20:00", dtFormatter);
         LocalDateTime startTimeTwo = LocalDateTime.parse("09-10-2021 22:30", dtFormatter);
         LocalDateTime startTimeThree = LocalDateTime.parse("09-10-2021 18:00", dtFormatter);
 
-        Showing showing1 = new Showing(movie1,startTimeOne, Room.ROOM_ONE);
-        Showing showing2 = new Showing(movie3,startTimeOne,Room.ROOM_TWO);
-        Showing showing3 = new Showing(movie2,startTimeTwo,Room.ROOM_TWO);
-        Showing showing4 = new Showing(movie4,startTimeTwo,Room.ROOM_ONE);
-        Showing showing5 = new Showing(movie2,startTimeThree,Room.ROOM_ONE);
-        Showing showing6 = new Showing(movie4,startTimeThree,Room.ROOM_TWO);
+        Showing showing1 = new Showing(movie1, 200, startTimeOne, Room.ROOM_ONE);
+        Showing showing2 = new Showing(movie3, 200, startTimeOne, Room.ROOM_TWO);
+        Showing showing3 = new Showing(movie2, 200, startTimeTwo, Room.ROOM_TWO);
+        Showing showing4 = new Showing(movie4, 200, startTimeTwo, Room.ROOM_ONE);
+        Showing showing5 = new Showing(movie2, 200, startTimeThree, Room.ROOM_ONE);
+        Showing showing6 = new Showing(movie4, 200, startTimeThree, Room.ROOM_TWO);
         showings.add(showing1);
         showings.add(showing2);
         showings.add(showing3);

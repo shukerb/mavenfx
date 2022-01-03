@@ -41,6 +41,13 @@ public class MovieController {
         return null;
     }
 
+    public Movie getMovieByName(String name) {
+        for (Movie movie : movies) {
+            if (movie.getMovieName().equals(name))
+                return movie;
+        }
+        return null;
+    }
 
     public void addMovie(Movie movie) {
         this.movies.add(movie);

@@ -76,7 +76,6 @@ public class LoginWindow {
         if (user != null) {
             MainWindow mainWindow = new MainWindow(window, user, db);
             this.user = null;
-            window.hide();
         }
         //set the error message here
         lError.setText("Login failed");

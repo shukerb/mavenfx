@@ -9,14 +9,11 @@ public class Movie {
     private String movieName;
     private LocalTime duration;
     private double ticketPrice;
-    private int availableTickets;
 
-    public Movie(String movieName, LocalTime duration, double ticketPrice,
-                 int availableTickets) {
+    public Movie(String movieName, LocalTime duration, double ticketPrice) {
         this.movieName = movieName;
         this.duration = duration;
         this.ticketPrice = ticketPrice;
-        this.availableTickets = availableTickets;
         this.id = UUID.randomUUID();
     }
 
@@ -42,14 +39,6 @@ public class Movie {
 
     public void setTicketPrice(double ticketPrice) {
         this.ticketPrice = ticketPrice;
-    }
-
-    public int getAvailableTickets() {
-        return availableTickets;
-    }
-
-    public void setAvailableTickets(int availableTickets) {
-        this.availableTickets = availableTickets;
     }
 
     public LocalTime getDuration() {
