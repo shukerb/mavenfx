@@ -1,24 +1,24 @@
 package nl.inholland.javafx.View;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import nl.inholland.javafx.Controller.DataBase;
 import nl.inholland.javafx.Model.*;
 
 public class MainWindow {
 
-    private boolean loggedIn = true;
     private String title;
-    private User user;
+    private final User user;
     private Scene scene;
-    private Stage window;
-    private boolean isAdmin;
-    private DataBase db;
-    private Utils utils;
-    private VBox container;
+    private final Stage window;
+    private final boolean isAdmin;
+    private final DataBase db;
+    private final Utils utils;
 
     public MainWindow(Stage window, User user, DataBase db) {
         this.db = db;
@@ -35,7 +35,7 @@ public class MainWindow {
 
 
     public Scene buildMainScene(ButtonClicked option) {
-        container = new VBox();
+        VBox container = new VBox();
         MenuBar menuBar = createMenuBar();
         container.getChildren().add(menuBar);
 
@@ -57,8 +57,7 @@ public class MainWindow {
         }
 
 
-        Scene view = new Scene(container, 1200, 800);
-        return view;
+        return new Scene(container, 1200, 800);
     }
 
     private MenuBar createMenuBar() {
@@ -86,7 +85,6 @@ public class MainWindow {
         }
         menuBar.getMenus().addAll(help, logout);
 
-
         return menuBar;
     }
 
@@ -94,11 +92,15 @@ public class MainWindow {
         new LoginWindow(this.window, this.db);
     }
 
-
     private void startWindow(ButtonClicked option) {
+
         this.scene = buildMainScene(option);
         this.window.setScene(getScene());
         this.window.setTitle(title);
         this.window.show();
+
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 }

@@ -1,14 +1,12 @@
 package nl.inholland.javafx.Controller;
 
-import nl.inholland.javafx.Model.Role;
 import nl.inholland.javafx.Model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserController {
 
-    private List<User> users;
+    private final List<User> users;
 
     public UserController(DataBase db) {
         this.users = db.getUsers();
@@ -30,17 +28,16 @@ public class UserController {
     public void editUser(User editedUser) {
 
         for (User user : users) {
-            if (user.getUserId().equals(editedUser.getUserId())){
+            if (user.getUserId().equals(editedUser.getUserId())) {
                 removeUserFromDB(user);
                 addUserToDB(editedUser);
             }
         }
     }
 
-    public void removeUserFromDB(User user){
+    public void removeUserFromDB(User user) {
         this.users.remove(user);
     }
-
 
 
 }

@@ -1,6 +1,5 @@
 package nl.inholland.javafx.View;
 
-import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,13 +12,13 @@ import nl.inholland.javafx.Controller.DataBase;
 import nl.inholland.javafx.Model.User;
 
 
-public class PopUpWindow  {
+public class PopUpWindow {
     private Stage mainWindow;
     private DataBase db;
     private User user;
-    private String message;
+    private final String message;
 
-    public PopUpWindow(Stage window,DataBase db,User user,String message) {
+    public PopUpWindow(Stage window, DataBase db, User user, String message) {
         this.mainWindow = window;
         this.db = db;
         this.user = user;
@@ -41,20 +40,21 @@ public class PopUpWindow  {
         Button okButton = new Button("OK");
 
         okButton.setOnAction(actionEvent -> {
-            if (this.user != null && this.mainWindow != null && this.db !=null){
+            if (this.user != null && this.mainWindow != null && this.db != null) {
                 stage.close();
-                MainWindow mainWindow = new MainWindow(this.mainWindow,this.user,this.db);
+                MainWindow mainWindow = new MainWindow(this.mainWindow, this.user, this.db);
             } else {
-                stage.close();            }
+                stage.close();
+            }
         });
 
-        pane.add(text,0,0);
-        pane.add(okButton,0,1);
+        pane.add(text, 0, 0);
+        pane.add(okButton, 0, 1);
         pane.setAlignment(Pos.CENTER);
         pane.setVgap(15);
         pane.setHgap(15);
 
-        Scene scene = new Scene(pane, 400, 400);
+        Scene scene = new Scene(pane, 600, 200);
         stage.setScene(scene);
         stage.show();
 

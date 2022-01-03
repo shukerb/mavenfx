@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import nl.inholland.javafx.Controller.DataBase;
 import nl.inholland.javafx.Controller.MovieController;
 import nl.inholland.javafx.Controller.ShowingController;
-import nl.inholland.javafx.Controller.UserController;
 import nl.inholland.javafx.Model.Movie;
 import nl.inholland.javafx.Model.Room;
 import nl.inholland.javafx.Model.Showing;
@@ -29,15 +28,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
 public class Utils {
-    private UserController userController;
-    private MovieController movieController;
-    private ShowingController showingController;
+    private final MovieController movieController;
+    private final ShowingController showingController;
     private boolean removeOldForm = false;
-    private User user;
-    private Stage window;
-    private DataBase db;
+    private final User user;
+    private final Stage window;
+    private final DataBase db;
 
 
     public Utils(DataBase db, User user, Stage window) {
@@ -46,7 +45,6 @@ public class Utils {
         this.window = window;
         this.showingController = new ShowingController(db);
         this.movieController = new MovieController(db);
-        this.userController = new UserController(db);
     }
 
     private TableView<Showing> createTableViewForShowing(Room room, VBox container, boolean isAdmin) {
@@ -84,6 +82,7 @@ public class Utils {
         tvShowings.getColumns().addAll(startTime, endTime, title, seats, price);
 
         tvShowings.setItems(FXCollections.observableArrayList(showingController.showingsByRoom(room)));
+        tvShowings.getSortOrder().add(startTime);
 
         tvShowings.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) ->
         {
@@ -138,6 +137,49 @@ public class Utils {
         pane.setPadding(new Insets(20, 10, 10, 10));
 
         container.getChildren().add(pane);
+    }
+
+    public GridPane buildAddMovieForm() {
+        GridPane pane = new GridPane();
+
+        Text text = new Text("Add Movie");
+        text.setFont(Font.font("verdana", FontWeight.BOLD, 15));
+        pane.add(text, 0, 0);
+
+
+        pane.add(new Label("Movie Name : "), 0, 1);
+        TextField movieName = new TextField();
+        pane.add(movieName, 1, 1);
+        pane.add(new Label("Duration: "), 0, 2);
+        TextField movieDuration = new TextField("02:30");
+        pane.add(movieDuration, 1, 2);
+        pane.add(new Label("Ticket Price: "), 0, 3);
+        TextField ticketPrice = new TextField();
+        pane.add(ticketPrice, 1, 3);
+
+        Button btnAddMovie = new Button("Add Movie");
+        pane.add(btnAddMovie, 0, 4);
+        btnAddMovie.setOnAction(actionEvent -> {
+            try {
+                String name = movieName.getText();
+                LocalTime duration = getMovieDuration(movieDuration.getText());
+                double price = Double.parseDouble(ticketPrice.getText());
+                Movie movie = new Movie(name, duration, price);
+                movieController.addMovie(movie);
+                new PopUpWindow(this.window, this.db, this.user, "Successfully added a Movie");
+
+            } catch (Exception e) {
+                new PopUpWindow("Please make sure to fill all the fields with the right Values");
+            }
+
+        });
+
+        pane.setVgap(10);
+        pane.setHgap(10);
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(20, 10, 10, 10));
+
+        return pane;
     }
 
     public void buildShowingsPane(VBox container, boolean isAdmin) {
@@ -236,9 +278,9 @@ public class Utils {
                 LocalDateTime starts = startOfShowing(startDate.getValue().toString(), startTime.getText());
                 Room selectedRoom = Room.valueOf(cbRoom.getSelectionModel().getSelectedItem().toString());
                 Showing showing = new Showing(selectedMovie, numberOfTickets, starts, selectedRoom);
-                if (showingController.checkIfShowingsOverlap(showing)){
+                if (showingController.checkIfShowingsOverlap(showing)) {
                     new PopUpWindow("Time selected overlaps with other Showing");
-                }else {
+                } else {
                     showingController.addShowing(showing);
                     new PopUpWindow(this.window, this.db, this.user, "Successfully added a showing");
                 }
@@ -263,7 +305,7 @@ public class Utils {
         if (this.removeOldForm) {
             container.getChildren().remove(container.getChildren().get(2));
         }
-
+        UUID selectedShowingId = selectedShowing.getId();
         GridPane pane = new GridPane();
 
         Text text = new Text("Purchase Tickets");
@@ -290,6 +332,25 @@ public class Utils {
         pane.add(name, 4, 3);
         Button purchase = new Button("Purchase");
         pane.add(purchase, 0, 4);
+        purchase.setOnAction(actionEvent -> {
+            try {
+                int selectedNumberOfTickets = numberOfTickets.getValue();
+                if (selectedNumberOfTickets != 0 && !name.getText().isEmpty()) {
+                    showingController.sellShowingTickets(selectedShowingId, selectedNumberOfTickets);
+                    new PopUpWindow(this.window, this.db, this.user, "Successfully purchased tickets");
+                } else throw new Exception();
+
+            } catch (Exception e) {
+                new PopUpWindow("Error: Please make sure to fill all the fields with the right Values");
+            }
+        });
+
+        Button btnClear = new Button("Clear Form");
+        pane.add(btnClear, 0, 5);
+        btnClear.setOnAction(actionEvent -> {
+            container.getChildren().remove(container.getChildren().get(2));
+            removeOldForm = false;
+        });
 
         pane.setVgap(10);
         pane.setHgap(10);
@@ -340,49 +401,6 @@ public class Utils {
         lEndTime.setText(endTime.toString());
         double selectedMoviePrice = selectedMovie.getTicketPrice();
         moviePrice.setText(Double.toString(selectedMoviePrice));
-    }
-
-    public GridPane buildAddMovieForm() {
-        GridPane pane = new GridPane();
-
-        Text text = new Text("Add Movie");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, 15));
-        pane.add(text, 0, 0);
-
-
-        pane.add(new Label("Movie Name : "), 0, 1);
-        TextField movieName = new TextField();
-        pane.add(movieName, 1, 1);
-        pane.add(new Label("Duration: "), 0, 2);
-        TextField movieDuration = new TextField("02:30");
-        pane.add(movieDuration, 1, 2);
-        pane.add(new Label("Ticket Price: "), 0, 3);
-        TextField ticketPrice = new TextField();
-        pane.add(ticketPrice, 1, 3);
-
-        Button btnAddMovie = new Button("Add Movie");
-        pane.add(btnAddMovie, 0, 4);
-        btnAddMovie.setOnAction(actionEvent -> {
-            try {
-                String name = movieName.getText();
-                LocalTime duration = getMovieDuration(movieDuration.getText());
-                double price = Double.parseDouble(ticketPrice.getText());
-                Movie movie = new Movie(name,duration,price);
-                movieController.addMovie(movie);
-                new PopUpWindow(this.window, this.db, this.user, "Successfully added a Movie");
-
-            } catch (Exception e) {
-                new PopUpWindow("Please make sure to fill all the fields with the right Values");
-            }
-
-        });
-
-        pane.setVgap(10);
-        pane.setHgap(10);
-        pane.setAlignment(Pos.CENTER);
-        pane.setPadding(new Insets(20, 10, 10, 10));
-
-        return pane;
     }
 
     private LocalTime getMovieDuration(String duration) {

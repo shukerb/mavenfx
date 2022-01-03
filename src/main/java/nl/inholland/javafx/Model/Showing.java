@@ -5,10 +5,10 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public class Showing {
-    private UUID id;
+    private final UUID id;
     private Movie movie;
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private final LocalDateTime endTime;
     private int availableTickets;
     private Room room;
 
@@ -65,13 +65,11 @@ public class Showing {
 
         int hours = duration.getHour();
         int minutes = duration.getMinute();
-        LocalDateTime endOfMovie = startTime.plusHours(hours).plusMinutes(minutes);
-
-        return endOfMovie;
+        return startTime.plusHours(hours).plusMinutes(minutes);
     }
 
     public String getRoomToString() {
-        if (this.room == Room.ROOM_ONE){
+        if (this.room == Room.ROOM_ONE) {
             return "Room One";
         }
         return "Room Two";

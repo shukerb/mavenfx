@@ -16,18 +16,16 @@ import nl.inholland.javafx.Model.User;
 public class LoginWindow {
 
 
-    private String title = "LoginWindow -- Cinema JavaFX application";
-    private UserController controller;
-    private Stage window;
-    private User user;
-    private DataBase db;
+    private final UserController controller;
+    private final Stage window;
+    private final DataBase db;
 
-    final Label lUsername = new Label("Username:");
-    final Label lPassword = new Label("Password:");
-    final TextField tfUsername = new TextField();
-    final PasswordField pfPassword = new PasswordField();
-    final Button btLogin = new Button("Login");
-    private Label lError = new Label("");
+    private final Label lUsername = new Label("Username:");
+    private final Label lPassword = new Label("Password:");
+    private final TextField tfUsername = new TextField();
+    private final PasswordField pfPassword = new PasswordField();
+    private final Button btLogin = new Button("Login");
+    private final Label lError = new Label("");
 
     private Scene scene;
 
@@ -42,6 +40,7 @@ public class LoginWindow {
 
     private void startWindow() {
         window.setScene(getScene());
+        String title = "LoginWindow -- Cinema JavaFX application";
         window.setTitle(title);
         window.show();
     }
@@ -70,12 +69,12 @@ public class LoginWindow {
     }
 
     private void loginAction(String username, String password) {
-        user = controller.login(username, password);
+        User user = controller.login(username, password);
         tfUsername.clear();
         pfPassword.clear();
         if (user != null) {
             MainWindow mainWindow = new MainWindow(window, user, db);
-            this.user = null;
+            user = null;
         }
         //set the error message here
         lError.setText("Login failed");

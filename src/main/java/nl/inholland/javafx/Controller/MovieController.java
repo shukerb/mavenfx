@@ -1,19 +1,13 @@
 package nl.inholland.javafx.Controller;
 
 import nl.inholland.javafx.Model.Movie;
-import nl.inholland.javafx.Model.Room;
-import nl.inholland.javafx.Model.Showing;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class MovieController {
 
-    private List<Movie> movies;
+    private final List<Movie> movies;
 
     public List<Movie> getMovies() {
         return movies;
