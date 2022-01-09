@@ -39,5 +39,13 @@ public class UserController {
         this.users.remove(user);
     }
 
+    public boolean checkIfUsernameAlreadyExist(String username) {
+        for (User user : users) {
+            if (user.getUserName().toLowerCase().equals(username.toLowerCase()))
+                return true;
+        }
+        return false;
+    }
+
 
 }

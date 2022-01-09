@@ -25,6 +25,7 @@ public class LoginWindow {
     private final TextField tfUsername = new TextField();
     private final PasswordField pfPassword = new PasswordField();
     private final Button btLogin = new Button("Login");
+    private final Button btSignUp = new Button("SignUp");
     private final Label lError = new Label("");
 
     private Scene scene;
@@ -39,14 +40,10 @@ public class LoginWindow {
     }
 
     private void startWindow() {
-        window.setScene(getScene());
+        window.setScene(scene);
         String title = "LoginWindow -- Cinema JavaFX application";
         window.setTitle(title);
         window.show();
-    }
-
-    public Scene getScene() {
-        return scene;
     }
 
     private Scene buildLoginScene() {
@@ -56,12 +53,14 @@ public class LoginWindow {
         pane.add(lPassword, 0, 1);
         pane.add(pfPassword, 1, 1);
         pane.add(btLogin, 1, 3);
+        pane.add(btSignUp,2,3);
         pane.add(lError, 0, 5);
         pane.setAlignment(Pos.CENTER);
         pane.setVgap(5);
         pane.setHgap(5);
         lError.setTextFill(Color.web("#FF0000"));
         btLogin.setOnAction(actionEvent -> loginAction(tfUsername.getText(), pfPassword.getText()));
+        btSignUp.setOnAction(actionEvent -> new SignUpWindow(controller,window,db));
 
         scene = new Scene(pane, 400, 400);
 

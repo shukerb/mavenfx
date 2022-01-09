@@ -57,7 +57,7 @@ public class MainWindow {
         }
 
 
-        return new Scene(container, 1200, 800);
+        return new Scene(container, 1200, 600);
     }
 
     private MenuBar createMenuBar() {
